@@ -2,6 +2,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -60,7 +61,10 @@ const Login = () => {
               name="password"
               id=""
             />
-            <span className="absolute right-2" onClick={() => setShowPass(!showPass)}>
+            <span
+              className="absolute right-2"
+              onClick={() => setShowPass(!showPass)}
+            >
               {showPass ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
@@ -72,6 +76,10 @@ const Login = () => {
             value="Submit"
           />
         </form>
+        <p>
+          New to our website? Please go to the {" "}
+          <Link className="link link-primary" to="/register">Registration</Link> page.
+        </p>
         {error && <p className="text-red-700">{error}</p>}
         {success && <p className="text-green-700">{success}</p>}
       </div>

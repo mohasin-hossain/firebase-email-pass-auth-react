@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [error, setError] = useState("");
@@ -100,6 +101,10 @@ const Register = () => {
             value="Submit"
           />
         </form>
+        <p>
+          Old User? Please go to the {" "}
+          <Link className="link link-primary" to="/login">Login</Link> page.
+        </p>
         {error && <p className="text-red-700">{error}</p>}
         {success && <p className="text-green-700">{success}</p>}
       </div>
