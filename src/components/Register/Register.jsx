@@ -16,6 +16,13 @@ const Register = () => {
     setError("");
     setSuccess("");
 
+    if(password.length < 6) {
+        setError("Password Must be at least 6 characters");
+        return;
+    } else if (!/[A-Z]/.test(password)) {
+        setError("Password Must have atleast one capital letter");
+        return;
+    }
 
     // Creat User Account
     createUserWithEmailAndPassword(auth, email, password)
