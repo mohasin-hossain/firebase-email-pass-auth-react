@@ -13,6 +13,7 @@ const Register = () => {
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const accepted = e.target.terms.checked;
 
     // Clearing Errr/success messages
     setError("");
@@ -23,6 +24,9 @@ const Register = () => {
       return;
     } else if (!/[A-Z]/.test(password)) {
       setError("Password Must have atleast one capital letter");
+      return;
+    } else if (!accepted) {
+      setError("Accept our terms and conditions!");
       return;
     }
 
@@ -70,11 +74,25 @@ const Register = () => {
               id=""
               required
             />
-            <span className="absolute right-2" onClick={() => setShowPass(!showPass)}>
+            <span
+              className="absolute right-2"
+              onClick={() => setShowPass(!showPass)}
+            >
               {showPass ? <FaEyeSlash /> : <FaEye />}
             </span>
           </div>
           <br />
+          <div className="mb-4">
+            <input
+              className="checkbox mr-2"
+              type="checkbox"
+              name="terms"
+              id="terms"
+            />
+            <label htmlFor="terms">
+              Accept our <a href="">Terms and Conditions</a>
+            </label>
+          </div>
           <input
             className="btn btn-secondary w-3/4 mb-4"
             type="submit"
