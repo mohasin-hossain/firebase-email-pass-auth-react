@@ -1,4 +1,5 @@
 import {
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
@@ -35,7 +36,18 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        setSuccess("user logged in successfully");
+
+        // verifying if user is verified or not
+        if (!user.emailVerified) {
+          // verify Email
+          sendEmailVerification(auth.currentUser).then(() => {
+            alert(
+              "You are not verified yet. We've sent a verification email, please verify your email to log in."
+            );
+          });
+        } else {
+          setSuccess("user logged in successfully");
+        }
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -57,7 +69,9 @@ const Login = () => {
 
     sendPasswordResetEmail(auth, email)
       .then(() => {
-        setSuccess("Password reset Email sent successfully. Check your email for further instructions.");
+        setSuccess(
+          "Password reset Email sent successfully. Check your email for further instructions."
+        );
       })
       .catch((error) => {
         const errorCode = error.code;

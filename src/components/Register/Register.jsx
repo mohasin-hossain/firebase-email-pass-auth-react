@@ -1,4 +1,7 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -37,6 +40,11 @@ const Register = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         setSuccess("User created successfully!");
+
+        // verify Email
+        sendEmailVerification(auth.currentUser).then(() => {
+          alert("We've sent a verification email, please verify your email to log in.");
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -102,8 +110,11 @@ const Register = () => {
           />
         </form>
         <p>
-          Old User? Please go to the {" "}
-          <Link className="link link-primary" to="/login">Login</Link> page.
+          Old User? Please go to the{" "}
+          <Link className="link link-primary" to="/login">
+            Login
+          </Link>{" "}
+          page.
         </p>
         {error && <p className="text-red-700">{error}</p>}
         {success && <p className="text-green-700">{success}</p>}
