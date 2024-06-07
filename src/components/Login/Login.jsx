@@ -1,6 +1,9 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import auth from "../../firebase/firebase.config";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
@@ -8,6 +11,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showPass, setShowPass] = useState("");
+  const emailRef = useRef(null);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -40,6 +44,27 @@ const Login = () => {
       });
   };
 
+  const handleForgotPassword = () => {
+    const email = emailRef.current.value;
+
+    if (!email) {
+      setError("Please write your Email to get an password reset mail!");
+      return;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError("Plese use a valid Email!");
+      return;
+    }
+
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        setSuccess("Password reset Email sent successfully. Check your email for further instructions.");
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
+
   return (
     <div>
       <h1 className="text-center mb-2 text-3xl">Please Login</h1>
@@ -48,9 +73,11 @@ const Login = () => {
           <input
             className="input input-bordered w-96 mt-4"
             placeholder="Email"
+            ref={emailRef}
             type="email"
             name="email"
             id=""
+            required
           />
           <br />
           <div className="relative flex items-center">
@@ -60,6 +87,7 @@ const Login = () => {
               type={showPass ? "text" : "password"}
               name="password"
               id=""
+              required
             />
             <span
               className="absolute right-2"
@@ -76,9 +104,15 @@ const Login = () => {
             value="Submit"
           />
         </form>
+        <p onClick={handleForgotPassword} className="link link-secondary">
+          Forgot Password
+        </p>
         <p>
-          New to our website? Please go to the {" "}
-          <Link className="link link-primary" to="/register">Registration</Link> page.
+          New to our website? Please go to the{" "}
+          <Link className="link link-primary" to="/register">
+            Registration
+          </Link>{" "}
+          page.
         </p>
         {error && <p className="text-red-700">{error}</p>}
         {success && <p className="text-green-700">{success}</p>}
