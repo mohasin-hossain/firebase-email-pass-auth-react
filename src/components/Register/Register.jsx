@@ -3,6 +3,8 @@ import auth from "../../firebase/firebase.config";
 import { useState } from "react";
 
 const Register = () => {
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -10,18 +12,21 @@ const Register = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
+    // Clearing Errr/success messages
+    setError("");
+    setSuccess("");
 
 
     // Creat User Account
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-  
+        setSuccess("User created successfully!");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-
+        setError(errorMessage);
       });
   };
 
@@ -62,7 +67,8 @@ const Register = () => {
             value="Submit"
           />
         </form>
-       
+        {error && <p className="text-red-700">{error}</p>}
+        {success && <p className="text-green-700">{success}</p>}
       </div>
     </div>
   );
